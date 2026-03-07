@@ -1,10 +1,20 @@
 <script setup>
 import { computed } from 'vue'
 import AnimeCard from '@/components/AnimeCard.vue'
-import WatchList from '@/components/WatchList.vue'
 import { useAnimeRoulette } from '@/composables/useAnimeRoulette'
+import WatchList from '@/components/WatchList.vue'
 
-const { anime, loading, error, spin, cooldownLeft } = useAnimeRoulette()
+const {
+  anime,
+  loading,
+  error,
+  spin,
+  cooldownLeft,
+  addToWatchlist,
+  watchlist,
+  isInWatchlist,
+  removeFromWatchlist,
+} = useAnimeRoulette()
 
 const spinDisabled = computed(() => loading.value || cooldownLeft.value > 0)
 
@@ -30,8 +40,8 @@ const spinLabel = computed(() => {
         <p class="text-xs font-semibold tracking-[0.3em] text-cyan-300/90 uppercase">Project #4</p>
         <h1 class="mt-2 text-4xl font-black text-white sm:text-5xl">Anime Roulette Machine</h1>
         <p class="mt-2 max-w-3xl text-sm text-slate-300 sm:text-base">
-          Spin the reel, request a random anime from Jinkan with VueUse useFech, and learn how REST
-          APIs signal rate limiting with HTTP 429
+          Spin the reel, request a random anime from Jinkan with VueUse useFech, and learnhow REST
+          APIs signal rate limiting with HTTP 429.
         </p>
       </header>
 
@@ -44,7 +54,7 @@ const spinLabel = computed(() => {
               <div>
                 <h2 class="text-xl font-bold text-white">Roulette</h2>
                 <p class="text-sm text-slate-300">
-                  Pull the lever for your next anime recommendation.
+                  Pull the lever for your next random anime recommendation.
                 </p>
               </div>
               <button
@@ -67,9 +77,14 @@ const spinLabel = computed(() => {
             :loading="loading"
             :error="error"
             :anime="anime"
+            :in-watchlist="Boolean(anime && isInWatchlist(anime.mal_id))"
+            @add="addToWatchlist"
           />
         </section>
-        <WatchList />
+        <WatchList
+          :items="watchlist"
+          @remove="removeFromWatchlist"
+        />
       </div>
     </div>
   </main>

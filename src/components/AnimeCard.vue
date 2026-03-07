@@ -86,6 +86,7 @@ watch(
       <h3 class="text-lg font-semibold">Spin failed</h3>
       <p class="mt-2 text-sm text-red-100/90">{{ error }}</p>
     </div>
+
     <div
       v-else-if="anime"
       class="space-y-4"
